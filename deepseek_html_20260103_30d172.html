@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXUS | Музыкальный лейбл</title>
+    <style>
+        :root {
+            --primary: #8a2be2;
+            --secondary: #ff00ff;
+            --dark: #121212;
+            --light: #f5f5f5;
+            --gray: #2a2a2a;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--light);
+            line-height: 1.6;
+            padding: 15px;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+        
+        .telegram-theme {
+            /* Стили для интеграции с Telegram */
+            --tg-theme-bg-color: var(--dark);
+            --tg-theme-text-color: var(--light);
+            --tg-theme-hint-color: #aaa;
+            --tg-theme-link-color: var(--primary);
+            --tg-theme-button-color: var(--primary);
+            --tg-theme-button-text-color: white;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(138, 43, 226, 0.3);
+        }
+        
+        .logo {
+            font-size: 32px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 5px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .tagline {
+            color: rgba(255,255,255,0.9);
+            font-size: 14px;
+        }
+        
+        .section {
+            background: var(--gray);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .section-title {
+            font-size: 22px;
+            margin-bottom: 15px;
+            color: var(--light);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(var(--primary), var(--secondary));
+            border-radius: 2px;
+        }
+        
+        .artist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .artist-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+            padding: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .artist-card:hover {
+            transform: translateY(-5px);
+            background: rgba(138, 43, 226, 0.1);
+            border-color: var(--primary);
+        }
+        
+        .artist-card:active {
+            transform: translateY(-2px);
+        }
+        
+        .artist-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .artist-name {
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        
+        .artist-genre {
+            font-size: 12px;
+            color: var(--primary);
+            text-align: center;
+            opacity: 0.8;
+        }
+        
+        .release-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .release-item {
+            display: flex;
+            align-items: center;
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .release-item:hover {
+            background: rgba(138, 43, 226, 0.1);
+            border-color: var(--primary);
+        }
+        
+        .release-cover {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            margin-right: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+        
+        .release-info {
+            flex: 1;
+        }
+        
+        .release-title {
+            font-size: 16px;
+            font-weight: 600;
+        }
+        
+        .release-artist {
+            font-size: 14px;
+            color: #aaa;
+            margin-top: 2px;
+        }
+        
+        .release-date {
+            font-size: 12px;
+            color: var(--primary);
+            margin-top: 5px;
+        }
+        
+        .play-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .play-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+        
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 5px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border-radius: 12px;
+        }
+        
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: white;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 12px;
+            color: var(--light);
+            font-size: 16px;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.3s;
+        }
+        
+        .submit-btn:active {
+            transform: scale(0.98);
+        }
+        
+        .back-to-bot {
+            display: block;
+            text-align: center;
+            padding: 12px;
+            background: rgba(0, 136, 204, 0.1);
+            color: #0088cc;
+            border-radius: 12px;
+            text-decoration: none;
+            margin-top: 20px;
+            border: 1px solid rgba(0, 136, 204, 0.3);
+        }
+        
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .section {
+            animation: fadeIn 0.5s ease forwards;
+        }
+        
+        .section:nth-child(2) { animation-delay: 0.1s; }
+        .section:nth-child(3) { animation-delay: 0.2s; }
+        .section:nth-child(4) { animation-delay: 0.3s; }
+        
+        /* Адаптивность */
+        @media (max-width: 480px) {
+            .artist-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+            
+            .header {
+                padding: 12px;
+            }
+            
+            .logo {
+                font-size: 28px;
+            }
+        }
+        
+        /* Телеграм стили */
+        .tg-button {
+            background: var(--tg-theme-button-color, var(--primary));
+            color: var(--tg-theme-button-text-color, white);
+            padding: 12px 24px;
+            border-radius: 12px;
+            text-align: center;
+            text-decoration: none;
+            display: block;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body class="telegram-theme">
+    <!-- Telegram WebApp API -->
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <script>
+        // Инициализация Telegram WebApp
+        const tg = window.Telegram.WebApp;
+        
+        // Расширяем на весь экран
+        tg.expand();
+        
+        // Устанавливаем цвета темы
+        tg.setHeaderColor('#121212');
+        tg.setBackgroundColor('#121212');
+        
+        // Получаем данные пользователя
+        const user = tg.initDataUnsafe.user;
+        
+        // Функция для отправки данных в бот
+        function sendDataToBot(data) {
+            tg.sendData(JSON.stringify(data));
+            tg.close(); // Закрываем WebApp после отправки
+        }
+        
+        // Функция для отслеживания действий
+        function trackAction(action, data = {}) {
+            sendDataToBot({
+                action: action,
+                ...data,
+                timestamp: new Date().toISOString(),
+                user_id: user?.id || 'anonymous'
+            });
+        }
+    </script>
+    
+    <div class="header" id="home">
+        <div class="logo">NEXUS</div>
+        <div class="tagline">Музыкальный лейбл нового поколения</div>
+        <div style="font-size: 12px; margin-top: 5px; opacity: 0.7;">Интегрировано с Telegram</div>
+    </div>
+    
+    <!-- Секция артистов -->
+    <div class="section" id="artists">
+        <h2 class="section-title">
+            <span style="margin-left: 5px;">🎤 Наши артисты</span>
+        </h2>
+        <div class="artist-grid">
+            <div class="artist-card" onclick="trackAction('artist_click', {artist_id: 1, artist_name: 'Arctic Pulse'})">
+                <div class="artist-avatar">A</div>
+                <div class="artist-name">Arctic Pulse</div>
+                <div class="artist-genre">Melodic Techno</div>
+            </div>
+            <div class="artist-card" onclick="trackAction('artist_click', {artist_id: 2, artist_name: 'Kira Nova'})">
+                <div class="artist-avatar">K</div>
+                <div class="artist-name">Kira Nova</div>
+                <div class="artist-genre">Synthwave</div>
+            </div>
+            <div class="artist-card" onclick="trackAction('artist_click', {artist_id: 3, artist_name: 'Omni Theory'})">
+                <div class="artist-avatar">O</div>
+                <div class="artist-name">Omni Theory</div>
+                <div class="artist-genre">Experimental</div>
+            </div>
+            <div class="artist-card" onclick="trackAction('artist_click', {artist_id: 4, artist_name: 'Lunar Echoes'})">
+                <div class="artist-avatar">L</div>
+                <div class="artist-name">Lunar Echoes</div>
+                <div class="artist-genre">Dream Pop</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Секция релизов -->
+    <div class="section" id="releases">
+        <h2 class="section-title">
+            <span style="margin-left: 5px;">🎵 Новые релизы</span>
+        </h2>
+        <div class="release-list">
+            <div class="release-item">
+                <div class="release-cover">N</div>
+                <div class="release-info">
+                    <div class="release-title">Neon Dreams</div>
+                    <div class="release-artist">Kira Nova</div>
+                    <div class="release-date">Май 2023</div>
+                </div>
+                <button class="play-btn" onclick="trackAction('release_play', {release_id: 1, release_title: 'Neon Dreams'})">
+                    ▶
+                </button>
+            </div>
+            <div class="release-item">
+                <div class="release-cover">Q</div>
+                <div class="release-info">
+                    <div class="release-title">Quantum States</div>
+                    <div class="release-artist">Omni Theory</div>
+                    <div class="release-date">Апрель 2023</div>
+                </div>
+                <button class="play-btn" onclick="trackAction('release_play', {release_id: 2, release_title: 'Quantum States'})">
+                    ▶
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- О лейбле -->
+    <div class="section" id="about">
+        <h2 class="section-title">
+            <span style="margin-left: 5px;">🏢 О лейбле</span>
+        </h2>
+        <p style="margin-bottom: 15px; color: #ccc; line-height: 1.5;">
+            Основан в 2018 году как платформа для артистов, создающих инновационную музыку на стыке жанров.
+            Мы верим в силу экспериментального подхода и поддерживаем музыкантов, которые не боятся исследовать новые звуковые территории.
+        </p>
+        
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-number">50+</div>
+                <div class="stat-label">Релизов</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">25+</div>
+                <div class="stat-label">Артистов</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-number">10M+</div>
+                <div class="stat-label">Прослушиваний</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Контакты -->
+    <div class="section" id="contacts">
+        <h2 class="section-title">
+            <span style="margin-left: 5px;">📞 Контакты</span>
+        </h2>
+        
+        <div class="contact-item">
+            <div class="contact-icon">📧</div>
+            <div>
+                <div style="font-weight: 600;">Email</div>
+                <div style="color: #ccc; font-size: 14px;">info@nexus-label.com</div>
+            </div>
+        </div>
+        
+        <div class="contact-item">
+            <div class="contact-icon">📍</div>
+            <div>
+                <div style="font-weight: 600;">Адрес</div>
+                <div style="color: #ccc; font-size: 14px;">Москва, ул. Арбат, 25</div>
+            </div>
+        </div>
+        
+        <div class="contact-item">
+            <div class="contact-icon">📱</div>
+            <div>
+                <div style="font-weight: 600;">Телефон</div>
+                <div style="color: #ccc; font-size: 14px;">+7 (999) 123-45-67</div>
+            </div>
+        </div>
+        
+        <h3 style="margin: 20px 0 15px; font-size: 18px;">Обратная связь</h3>
+        <form id="contactForm">
+            <div class="form-group">
+                <input type="text" class="form-input" placeholder="Ваше имя" required>
+            </div>
+            <div class="form-group">
+                <input type="email" class="form-input" placeholder="Ваш email" required>
+            </div>
+            <div class="form-group">
+                <textarea class="form-input" placeholder="Ваше сообщение" rows="4" required></textarea>
+            </div>
+            <button type="button" class="submit-btn" onclick="submitContactForm()">
+                Отправить сообщение
+            </button>
+        </form>
+    </div>
+    
+    <a href="https://t.me/your_bot" class="back-to-bot" onclick="tg.close()">
+        ← Вернуться в бота
+    </a>
+    
+    <script>
+        // Обработка формы
+        function submitContactForm() {
+            const form = document.getElementById('contactForm');
+            const name = form.querySelector('input[type="text"]').value;
+            const email = form.querySelector('input[type="email"]').value;
+            const message = form.querySelector('textarea').value;
+            
+            if (!name || !email || !message) {
+                alert('Пожалуйста, заполните все поля');
+                return;
+            }
+            
+            trackAction('contact_form', {
+                name: name,
+                email: email,
+                message: message
+            });
+            
+            // Показываем уведомление
+            if (tg && tg.showAlert) {
+                tg.showAlert('Спасибо! Ваше сообщение отправлено.');
+            } else {
+                alert('Спасибо! Ваше сообщение отправлено.');
+            }
+            
+            form.reset();
+        }
+        
+        // Плавная прокрутка к секциям
+        document.querySelectorAll('.artist-card, .release-item').forEach(item => {
+            item.style.cursor = 'pointer';
+        });
+        
+        // Инициализация при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            // Можно загружать данные с сервера
+            console.log('WebApp загружен для пользователя:', user);
+            
+            // Отправляем событие посещения
+            trackAction('webapp_visit');
+        });
+    </script>
+</body>
+</html>
